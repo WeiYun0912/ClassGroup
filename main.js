@@ -69,49 +69,59 @@ const getSameGroup = (student, studentSameGroupIndex) => {
 
 let a = firstGrouping(groups, index);
 
-// console.log(a);
+console.log(a);
 
 const randomGrouping = (students) => {
   let reandomGroup = [];
-  let studentIndex = 0;
   var g = [];
+  var c = [];
+  var roundRepeat = [];
   students.map((student) => {
     student.Students.map((student) => {
       // {Teacher: 'A', Student: 'A1', SameGroup: [A2,A3]}
       //RUN 3 次
+      
       let gIndex = 0;
+      let repeatIndex = 0;
       var sIndex = 0;
       for (let i = 0; i < Students.length; i++) {
+        // 第一round A2 A4 B2 要是student = A2 A4 B2 就跳過 否則就
+        // push到陣列
+        if(roundRepeat.length == 3) {
+          g = [];
+        }
+
         if (g.length == 0) {
-          if (student.SameGroup.includes(Students[sIndex]) != true) {
+          if(roundRepeat.length == 3 && roundRepeat[repeatIndex].Student != Students[i]){
+            g.push(student)
+          }else if (student.SameGroup.includes(Students[sIndex]) != true) {
             // A1 include [A2,A3] -> false -> push g
             g.push(student); //A1
             sIndex += 1;
           }
         } else if (g.length < 3) {
           sIndex++;
+          
           if (g[gIndex].SameGroup.includes(Students[sIndex]) != true) {
             const member = students
               .map((student) =>
                 student.Students.find((s) => s.Student == Students[sIndex])
-              )
-              .filter((f) => f != undefined);
+              ).filter((f) => f != undefined);
 
             g.push(member[0]); // B1
+            
             gIndex++;
           }
-        } else if (g.length == 3) {
-          console.log(g.length);
         }
-        // console.log(g);
       }
     });
+    
+    roundRepeat = [...g]
     reandomGroup.push(g);
+    
   });
   console.log("------------------------------------------");
   console.log(reandomGroup);
 };
-
-// console.log(a);
 
 randomGrouping(a);
